@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from workhelper.section.Section import Section
-from workhelper.section.utils import clear_float_last_zero
+from workhelper.section.utils import clear_float_last_zero as cflz
 
 class Circular(Section):
     
@@ -19,7 +19,7 @@ class Circular(Section):
 
     @property
     def symbol(self) -> str:
-        d = clear_float_last_zero(self.d)
+        d = cflz(self.d)
         return f"Φ{d}"
 
     @property
