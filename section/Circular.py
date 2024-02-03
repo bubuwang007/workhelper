@@ -8,6 +8,7 @@ class Circular(Section):
     def __init__(self, d, centroid=(0, 0)):
         super().__init__(centroid)
         self.d, self.r = d, d / 2
+        self.__check__()
 
     def __check__(self) -> None:
         if self.d <= 0:
@@ -27,7 +28,7 @@ class Circular(Section):
         return np.pi * self.d**2 / 4
     
     @property
-    def Ix(self):
+    def Ix(self) -> float:
         return np.pi * self.d**4 / 64
 
     Iy = Ix

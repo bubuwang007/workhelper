@@ -45,12 +45,16 @@ class Section(metaclass = ABCMeta):
         pass
 
     @property
-    def centroid(self):
+    def centroid(self) -> np.ndarray:
         '''截面重心'''
         return self.__centroid
+    
+    @centroid.setter
+    def centroid(self, centroid: tuple[float, float]|np.ndarray) -> None:
+        self.__centroid = np.array(centroid)
 
     @abstractmethod
-    def plot(self) -> None:
+    def plot(self, show=False) -> None:
         '''绘制截面'''
         pass
 
@@ -100,42 +104,46 @@ class Section(metaclass = ABCMeta):
     @property
     def border_top(self) -> float:
         '''上边界'''
-        return self.border[2]
+        return self.border[3]
     
     @property
     def border_bottom(self) -> float:
         '''下边界'''
-        return self.border[3]
+        return self.border[2]
 
     @property
-    def Wx_left(self) -> float:
+    def Wy_left(self) -> float:
         '''左侧X方向截面模量'''
-        return self.Ix / abs(self.border_left-self.centroid[0])
+        return self.Iy / abs(self.border_left-self.centroid[0])
     
     @property
-    def Wx_right(self) -> float:
+    def Wy_right(self) -> float:
         '''右侧X方向截面模量'''
-        return self.Ix / abs(self.border_right-self.centroid[0])
+        return self.Iy / abs(self.border_right-self.centroid[0])
     
     @property
-    def Wy_top(self) -> float:
+    def Wx_top(self) -> float:
         '''上侧Y方向截面模量'''
-        return self.Iy / abs(self.border_top-self.centroid[1])
+        return self.Ix / abs(self.border_top-self.centroid[1])
     
     @property
-    def Wy_bottom(self) -> float:
+    def Wx_bottom(self) -> float:
         '''下侧Y方向截面模量'''
-        return self.Iy / abs(self.border_bottom-self.centroid[1])
+        return self.Ix / abs(self.border_bottom-self.centroid[1])
 
     @property
     def Wx(self) -> float:
         '''X方向截面模量'''
-        return max(self.Wx_left, self.Wx_right)
+        return min(self.Wx_top, self.Wx_bottom)
 
     @property
     def Wy(self) -> float:
         '''Y方向截面模量'''
-        return max(self.Wy_top, self.Wy_bottom)
+        return min(self.Wy_left, self.Wy_right)
+
+    def offset(self, coords: np.ndarray|tuple[float, float]):
+        '''坐标偏移'''
+        self.centroid += np.array(coords)
 
     def __str__(self):
         info = [
@@ -148,10 +156,10 @@ class Section(metaclass = ABCMeta):
             f'iy:       {self.iy:.9f}',
             f'Wx:       {self.Wx:.9f}',
             f'Wy:       {self.Wy:.9f}',
-            f'Wx_left:  {self.Wx_left:.9f}',
-            f'Wx_right: {self.Wx_right:.9f}',
-            f'Wy_top:   {self.Wy_top:.9f}',
-            f'Wy_bottom:{self.Wy_bottom:.9f}',
+            f'Wx_top:   {self.Wx_top:.9f}',
+            f'Wx_bottom:{self.Wx_bottom:.9f}',
+            f'Wy_left:  {self.Wy_left:.9f}',
+            f'Wy_right: {self.Wy_right:.9f}',
             f'border:   {self.border}',
             f'centroid: {self.centroid}'
         ]
