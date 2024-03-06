@@ -28,3 +28,4 @@ class If:
     def __exit__(self, exc_type, exc_value, traceback) -> None:
         self.__commands.sub_prefix()
         self.__commands.append(Command("*ENDIF"))
+        self.__commands.finish()

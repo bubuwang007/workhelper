@@ -15,6 +15,7 @@ class Do:
         self.scope = f"do{Do.scope_num}"
         self.__commands = commands
         self.__i = commands.scalar("i", scope=self.scope, read_only=True)
+        self.__i.used = True
         if isinstance(rng, int):
             rng = (1, rng, 1)
         elif len(rng) == 1:
@@ -46,3 +47,4 @@ class Do:
         self.__commands.sub_prefix()
         self.__commands.append(Command(f"*ENDDO"))
         self.__commands.del_scalar(self.i)
+        self.__commands.finish()

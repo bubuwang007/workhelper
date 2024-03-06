@@ -22,7 +22,7 @@ class Elements:
     def EPLOT(self, *args) -> Command:
         '''Plots the selected elements.'''
         return Command(f'EPLOT')
-    
+
     @prep7
     def ELIST(self, start='all', stop='', step='', nnkey=0, rkey=1, ptkey=1) -> Command:
         '''Lists the element numbers and types.
@@ -40,7 +40,7 @@ class Elements:
                 1 — Show part ID number for each element.
         '''
         return Command(f'ELIST,{start},{stop},{step},{nnkey},{rkey},{ptkey}')
-    
+
     @prep7
     def INISTATE(self, action, *args) -> Command:
         '''Initializes the state of the selected elements.
@@ -64,7 +64,7 @@ class Elements:
                 Input values based on the Action type.
         '''
         return Command(f'INISTATE,{action},{",".join(map(str,args))}')
-    
+
     @prep7
     def MAT(self, mat=1)-> Command:
         '''Sets the element material attribute pointer.

@@ -25,7 +25,7 @@ class RectanglePipe(Section):
     @property
     def secname(self) -> str:
         return "矩形管截面"
-    
+
     @property
     def symbol(self) -> str:
         w, h, tw, th = map(cflz, (self.w, self.h, self.tw, self.th))
@@ -34,26 +34,26 @@ class RectanglePipe(Section):
     @property
     def area(self):
         return self.w * self.h - (self.w - 2 * self.tw) * (self.h - 2 * self.th)
-    
+
     @property
     def Ix(self) -> float:
         return (
             self.w * self.h**3 / 12
             - (self.w - 2 * self.tw) * (self.h - 2 * self.th) ** 3 / 12
         )
-    
+
     @property
     def Iy(self) -> float:
         return (
             self.w**3 * self.h / 12
             - (self.w - 2 * self.tw) ** 3 * (self.h - 2 * self.th) / 12
         )
-    
+
     @property
     def border(self) -> np.ndarray:
         return np.array((-self.w / 2+ self.centroid[0], self.w / 2+ self.centroid[0],
                          -self.h / 2+ self.centroid[1], self.h / 2+ self.centroid[1]))
-    
+
     def plot(self, show=True):
         plt.gca().set_aspect("equal")
         # 画矩形

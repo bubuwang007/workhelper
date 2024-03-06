@@ -13,3 +13,4 @@ from .Polygon import Polygon
 from .Rectangle import Rectangle
 from .RectanglePipe import RectanglePipe
 from .Section import Section
+from .P_MultiCircularPipe import P_MultiCircularPipe

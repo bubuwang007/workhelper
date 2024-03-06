@@ -50,7 +50,7 @@ class Commands(UserList[Command]):
         """添加注释"""
         self.append(Command(f"{msg}", is_comment = True))
 
-    def block(self, msg: str) -> None:
+    def block(self, msg: str, star_num =45, line_length=40) -> None:
         """添加注释块
 
         注释块组成为一个空行、一行*号、注释内容、一行*号、一个空行
@@ -69,21 +69,21 @@ class Commands(UserList[Command]):
              '']
         """
         self.blank()
-        self.append(Command(f"!{'*'*45}"))
+        self.append(Command(f"!{'*'*star_num}"))
         start, end, length = 0, 0, 0
         for i in msg:
             if ord(i) < 128:
                 length += 1
             else:
                 length += 2
-            if length >= 40:
+            if length >= line_length:
                 self.append(Command(f"! {msg[start:end]}"))
                 length = 0
                 start = end
             end += 1
         else:
             self.append(Command(f"! {msg[start:]}"))
-        self.append(Command(f"!{'*'*45}"))
+        self.append(Command(f"!{'*'*star_num}"))
         self.blank()
     
     def add_prefix(self) -> None:

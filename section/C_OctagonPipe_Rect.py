@@ -1,6 +1,13 @@
 import numpy as np
-from workhelper.section.Combination import Combination
-from workhelper.section import Rectangle, OctagonPipe
+
+try :
+    from Rectangle import Rectangle
+    from OctagonPipe import OctagonPipe
+    from Combination import Combination
+except ImportError:
+    from .Combination import Combination
+    from .Rectangle import Rectangle
+    from .OctagonPipe import OctagonPipe
 from workhelper.section.utils import clear_float_last_zero as cflz
 
 class C_OctagonPipe_Rect(Combination):
@@ -26,6 +33,7 @@ class C_OctagonPipe_Rect(Combination):
 
     def __init_sections__(self):
         o = OctagonPipe(self.v1, self.v2, self.v3, self.v4, self.v5, self.v6, self.v7)
+        self.points, self.innerpoints = o.points, o.innerpoints
         self.sections_add = [o,
             Rectangle(self.w, self.t1, centroid=(self.v3+self.w / 2, self.h / 2 - self.t1 / 2)),
             Rectangle(self.w, self.t1, centroid=(self.v3+self.w / 2, -self.h / 2 + self.t1 / 2)),

@@ -1,5 +1,9 @@
 from workhelper.section.Combination import Combination
-from workhelper.section import Rectangle
+
+try:
+    from Rectangle import Rectangle
+except ImportError:
+    from .Rectangle import Rectangle
 from workhelper.section.utils import clear_float_last_zero as cflz
 
 class I(Combination):
@@ -40,6 +44,6 @@ class I(Combination):
         return f"I{h}×{w}×{tw}×{tf}"
 
 if __name__ == "__main__":
-    i = I(200, 200, 8, 12)
+    i = I(175, 175, 7.5, 11)
     print(i)
     i.plot()

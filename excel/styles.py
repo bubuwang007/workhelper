@@ -8,28 +8,28 @@ ALIGNMENT_CENTER = Alignment(horizontal='center', vertical='center', wrapText=Tr
 ALIGNMENT_LEFT = Alignment(horizontal='left', vertical='center', wrapText=True)
 ALIGNMENT_RIGHT = Alignment(horizontal='right', vertical='center', wrapText=True)
 
-NUMBER_FORMAT = {
-    'General',
-    '0',
-    '0.00',
-    '#,#',
-    '#,#.00',
-    '0%',
-    '0.00%',
-    '0.00E+00',
-    '# ?/?',
-    '# ??/??',
-    'mm-dd-yy',
-    'd-mmm-yy',
-    'd-mmm',
-    'mmm-yy',
-    'h:mm AM/PM',
-    'h:mm:ss AM/PM',
-    'h:mm',
-    'h:mm:ss',
-    'hh:mm:ss',
-    '@'
-}
+# NUMBER_FORMAT = {
+#     'General',
+#     '0',
+#     '0.00',
+#     '#,#',
+#     '#,#.00',
+#     '0%',
+#     '0.00%',
+#     '0.00E+00',
+#     '# ?/?',
+#     '# ??/??',
+#     'mm-dd-yy',
+#     'd-mmm-yy',
+#     'd-mmm',
+#     'mmm-yy',
+#     'h:mm AM/PM',
+#     'h:mm:ss AM/PM',
+#     'h:mm',
+#     'h:mm:ss',
+#     'hh:mm:ss',
+#     '@'
+# }
 
 def text_length(cell):
     """计算单元格内容长度

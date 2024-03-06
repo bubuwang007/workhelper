@@ -1,3 +1,4 @@
+from typing import Sequence
 from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.cell.cell import Cell
 from openpyxl.utils import get_column_letter
@@ -58,8 +59,41 @@ class WorkSheet(Worksheet):
             else:
                 ret.update({i[0]: i[1:]})
         return ret
-    
+
     def set_list(
+        self,
+        li: list,
+        start_row: int = 1,
+        start_column: int = 1,
+        format = None,
+        alignment = None,
+        font = None,
+        direction: str = 'row',
+    ) -> None:
+        if direction == 'row':
+            for i, cell in enumerate(li):
+                    self.cell(
+                        start_row + i,
+                        start_column,
+                        cell,
+                        format,
+                        alignment,
+                        font
+                    )
+        elif direction == 'col':
+            for i, cell in enumerate(li):
+                    self.cell(
+                        start_row,
+                        start_column + i,
+                        cell,
+                        format,
+                        alignment,
+                        font
+                    )
+        else:
+            raise ValueError(f'Invalid value: {direction}')
+
+    def set_matrix(
         self,
         li: list,
         start_row: int = 1,
@@ -80,7 +114,7 @@ class WorkSheet(Worksheet):
                         alignment,
                         font
                     )
-        elif direction == 'column':
+        elif direction == 'col':
             for i, column in enumerate(li):
                 for j, cell in enumerate(column):
                     self.cell(
@@ -94,4 +128,49 @@ class WorkSheet(Worksheet):
         else:
             raise ValueError(f'Invalid value: {direction}')
 
-    
+    def set_dict(
+        self,
+        data: dict,
+        start_row: int = 1,
+        start_column: int = 1,
+        *,
+        alignment = None,
+        font = None
+    ) -> None:
+        for i, (k, v) in enumerate(data.items()):
+            self.cell(
+                start_row + i,
+                start_column,
+                k,
+                format="@",
+                alignment=alignment,
+                font=font,
+            )
+            if isinstance(v, str):
+                self.cell(
+                    start_row + i,
+                    start_column + 1,
+                    v,
+                    "@",
+                    alignment,
+                    font=font,
+                )
+            elif isinstance(v, Sequence):
+                for ii, vv in enumerate(v):
+                    self.cell(
+                        start_row + i,
+                        start_column + ii + 1,
+                        str(vv),
+                        "@",
+                        alignment,
+                        font=font,
+                    )
+            else:
+                self.cell(
+                    start_row + i,
+                    start_column + 1,
+                    str(v),
+                    "@",
+                    alignment=alignment,
+                    font=font,
+                )

@@ -74,6 +74,6 @@ class InclineRectangle(Section):
             plt.show()
     
 if __name__ == "__main__":
-    r = InclineRectangle(200, 100, 90)
+    r = InclineRectangle(200, 100, 30, (100, 200))
     print(r)
     r.plot()

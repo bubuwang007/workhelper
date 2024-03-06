@@ -40,6 +40,7 @@ class System:
 
     @all
     def CLEAR(self, start: bool = True) -> Command:
+        self.commands.switch_processor(Processor.begin)
         if start:
             return Command("/CLEAR,START")
         else:
@@ -78,7 +79,7 @@ class System:
             return Command("/UIS,MSGPOP,0")
         else:
             return Command("/UIS,MSGPOP,3")
-       
+
     def begin(self, *, filename: str, title: str, directory: str, paths: list[str]=[]):
         self.FINISH()
         self.CLEAR(True)
@@ -88,6 +89,7 @@ class System:
         self.TITLE(title)
         self.CWD(directory)
 
+    @all
     def NERR(self, nmerr, nmabt, ifkey: int|str='', num: int|str='') -> Command:
         '''Limits the number of warning and error messages displayed.
             NMERR
@@ -102,5 +104,34 @@ class System:
                 The number of invalid command warnings before a stop warning will be issued:
                 0 — Disables the stop warning/error function.
                 n — An integer value representing the number of warnings that will be encountered before prompting the user to stop (default = 5).
+        
+            /NERR,0
         '''
         return Command(f"/NERR,{nmerr},{nmabt},,{ifkey},{num}")
+    
+    @all
+    def NUMMRG(self, type="ALL") -> Command:
+        '''Merges coincident or equivalently defined items.'''
+        return Command(f"NUMMRG,{type}")
+    
+    @all
+    def NUMCMP(self, type="ALL") -> Command:
+        '''Compares coincident or equivalently defined items.'''
+        return Command(f"NUMCMP,{type}")
+    
+    @all
+    def OUTPUT(self, fname="", ext="", loc=""):
+        '''Specifies the output file name and location.
+        loc:
+            blank — Output is written starting at the top of the file.
+            APPEND — Output is appended to the end of the file.
+        '''
+        return Command(f"/OUTPUT,{fname},{ext},{loc}")
+    
+    @all
+    def GET(self, parname, entity, entnum="", item1="", it1num="", item2="", it2num="") -> Command:
+        '''Retrieves data from the database.
+        '''
+        par = self.commands.scalar(parname)
+        par.used = True
+        return Command(f"*GET,{par},{entity},{entnum},{item1},{it1num},{item2},{it2num}")

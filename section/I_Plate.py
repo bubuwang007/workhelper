@@ -1,5 +1,10 @@
 from workhelper.section.Combination import Combination
-from workhelper.section import Rectangle, I
+try:
+    from Rectangle import Rectangle
+    from I import I
+except ImportError:
+    from .Rectangle import Rectangle
+    from .I import I
 from workhelper.section.utils import clear_float_last_zero as cflz
 
 class I_Plate(Combination):

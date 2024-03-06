@@ -30,6 +30,17 @@ class Scalar(Expression):
         check_identifier(self.name)
         Expression.__init__(self, self.name)
 
+    def switch_commands(self, commands: Mac):
+        if self.scope != "global":
+            raise ValueError(f"Warning: {self.__id} is not global")
+        self.__old_commands = self.__commands
+        self.__commands = commands
+
+    def switch_back(self):
+        if self.scope != "global":
+            raise ValueError(f"Warning: {self.__id} is not global")
+        self.__commands = self.__old_commands
+
     @property
     def name(self) -> str:
         if not self.active:

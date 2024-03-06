@@ -1,5 +1,6 @@
 from __future__ import annotations
 import os
+from typing import Any
 
 from .Command import Command
 from .Commands import Commands
@@ -8,6 +9,7 @@ from .Scalar import Scalar
 from .Array import Array
 from .Do import Do
 from .If import If
+
 
 class Mac(Commands):
     name: str
@@ -49,7 +51,54 @@ class Mac(Commands):
             self.processor = processor
             self.append(Command(processor.value))
 
-    def scalar(self, name: str, value=None, scope: str = "local", read_only=False) -> Scalar:
+    def finish(self) -> None:
+        """结束命令流"""
+        self.append(Command("FINISH"))
+        self.processor = Processor.begin
+
+    def prep7(self) -> None:
+        """切换到prep7处理器"""
+        self.switch_processor(Processor.prep7)
+
+    def post26(self) -> None:
+        """切换到post26处理器"""
+        self.switch_processor(Processor.post26)
+
+    def post1(self) -> None:
+        """切换到post1处理器"""
+        self.switch_processor(Processor.post1)
+
+    def solu(self) -> None:
+        """切换到solu处理器"""
+        self.switch_processor(Processor.solu)
+
+    def opt(self) -> None:
+        """切换到opt处理器"""
+        self.switch_processor(Processor.opt)
+
+    def pds(self) -> None:
+        """切换到pds处理器"""
+        self.switch_processor(Processor.pds)
+
+    def aux2(self) -> None:
+        """切换到aux2处理器"""
+        self.switch_processor(Processor.aux2)
+
+    def aux12(self) -> None:
+        """切换到aux12处理器"""
+        self.switch_processor(Processor.aux12)
+
+    def aux15(self) -> None:
+        """切换到aux15处理器"""
+        self.switch_processor(Processor.aux15)
+
+    def runstat(self) -> None:
+        """切换到runstat处理器"""
+        self.switch_processor(Processor.runstat)
+
+    def scalar(
+        self, name: str, value=None, scope: str = "local", read_only=False
+    ) -> Scalar:
         scalar = Scalar(name, self, value, scope, read_only)
         name = scalar.name
         if name in self.scalars:
@@ -61,7 +110,7 @@ class Mac(Commands):
         self.tmp_index += 1
         return self.scalar(f"{self.name}{self.tmp_index}", value, scope="tmp")
 
-    def __gt__(self, other) -> Scalar:
+    def __gt__(self, other: Any) -> Scalar:
         return self.tmp_scalar(other)
 
     def global_scalar(self, name: str, value=None, read_only=False) -> Scalar:
@@ -119,7 +168,7 @@ class Mac(Commands):
         for para in self.arrays.values():
             if para.scope not in ["system", "global"]:
                 tmp.append(para)
-        if len(tmp)>0:
+        if len(tmp) > 0:
             self.block("清理数组")
         for i in tmp:
             self.del_array(i)
@@ -128,21 +177,22 @@ class Mac(Commands):
         for para in self.scalars.values():
             if para.scope not in ["system", "global"] and para.used:
                 tmp.append(para)
-        if len(tmp)>0:
+        if len(tmp) > 0:
             self.block("清理局部变量")
         for i in tmp:
             self.del_scalar(i)
 
-    def save(self, path: str) -> None:
+    def save(self, path: str) -> str:
         """保存命令流到文件
 
         Args:
             path (str): 保存文件路径
 
         """
-        with open(os.path.join(path, f'{self.name}.mac'), "w", encoding="u8") as f:
+        with open(os.path.join(path, f"{self.name}.mac"), "w", encoding="u8") as f:
             f.write(str(self))
         print(f"Save {self.name}.mac")
+        return os.path.abspath(os.path.join(path, f"{self.name}.mac"))
 
     def output(self, path: str) -> None:
         """输出命令流到文件
@@ -162,8 +212,13 @@ class Mac(Commands):
         for mac in macs:
             mac.save(path)
 
+    def excute(self, func, *args):
+        self.use(func)
+        self << func.call(*args)
+        self.processor = func.processor
+
     def __hash__(self) -> int:
         return hash(self.name)
-    
+
     def __repr__(self) -> str:
         return self.name

@@ -3,6 +3,8 @@ import typing
 
 from .Command import Command
 from .Do import Do
+from .If import If
+from .Scalar import Scalar
 from .utils import check_identifier
 from .Expression import BaseExpression, Expression
 
@@ -21,9 +23,33 @@ class Array(BaseExpression):
         BaseExpression.__init__(self, f"{self.name}")
         check_identifier(self.name)
         for i in range(self.__d_num):
-            tmp = self.__commands.scalar(f"{self.__id}_{i+1}", dimensions[i], scope=self.scope, read_only=True)
+            tmp = self.__commands.scalar(Array.dimension_name(self.__id, i+1), dimensions[i], scope=self.scope, read_only=True)
             self.__dimensions.append(tmp)
         self.__commands << f"*DIM,{self.name},arr,{self.row},{self.col},{self.plane}"
+
+    @staticmethod
+    def dimension_name(name: str, index: int) -> str:
+        return f"_{name}_{index}"
+    
+    @staticmethod
+    def exists(commands: Mac, name: str) -> Scalar:
+        '''存在返回1，不存在返回-1'''
+        scalar1 = commands > -1
+        scalar2 = commands > Array.dimension_name(name, 1)
+        with If(commands, scalar2>0) as i:
+            scalar1 << 1
+        return scalar1
+
+    def switch_commands(self, commands: Mac):
+        if self.scope != "global":
+            raise ValueError(f"Warning: {self.__id} is not global")
+        self.__old_commands = self.__commands
+        self.__commands = commands
+
+    def switch_back(self):
+        if self.scope != "global":
+            raise ValueError(f"Warning: {self.__id} is not global")
+        self.__commands = self.__old_commands
 
     @property
     def row(self):
@@ -57,12 +83,16 @@ class Array(BaseExpression):
             return f"{self.scope}_{self.__id}"
     
     def __getitem__(self, key):
-        if isinstance(key, int):
+        try:
+            key = (*key,)
+        except:
             key = (key,)
         return Expression(f"{self.name}({','.join([str(i) for i in key])})")
     
     def __setitem__(self, key, value):
-        if isinstance(key, int):
+        try:
+            key = (*key,)
+        except:
             key = (key,)
         self.__commands << Command(f"{self.name}({','.join([str(i) for i in key])})={value}")
 
@@ -78,20 +108,32 @@ class Array(BaseExpression):
                 for i, value in enumerate(data, 1):
                     self[i] = value
 
-    def iter_rows(self, start=1, end=None, step = 1) -> Do:
+    def iter_rows(self, start=1, end=None, step = 1, commands=None) -> Do:
         if end is None:
             end = self.row
-        return Do(self.__commands, (start, end, step))
+        if commands is None:
+            commands = self.__commands
+        do = Do(commands, (start, end, step))
+        do.__dict__["arr"] = self
+        return do
 
-    def iter_cols(self, start=1, end=None, step = 1) -> Do:
+    def iter_cols(self, start=1, end=None, step = 1, commands=None) -> Do:
         if end is None:
             end = self.col
-        return Do(self.__commands, (start, end, step))
+        if commands is None:
+            commands = self.__commands
+        do = Do(commands, (start, end, step))
+        do.__dict__["arr"] = self
+        return do
     
-    def iter_planes(self, start=1, end=None, step = 1) -> Do:
+    def iter_planes(self, start=1, end=None, step = 1, commands=None) -> Do:
         if end is None:
             end = self.plane
-        return Do(self.__commands, (start, end, step))
+        if commands is None:
+            commands = self.__commands
+        do = Do(commands, (start, end, step))
+        do.__dict__["arr"] = self
+        return do
 
     def delete(self):
         for d in self.__dimensions:
