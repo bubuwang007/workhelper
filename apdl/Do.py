@@ -28,6 +28,7 @@ class Do:
             raise ValueError(f"Invalid range: {rng}")
         self.__commands.append(Command(f"*DO,{self.i},{rng[0]},{rng[1]},{rng[2]}"))
         self.__commands.add_prefix()
+        self.__commands.finish()
 
     @property
     def i(self) -> Scalar:

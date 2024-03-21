@@ -89,6 +89,11 @@ class Math:
         return Expression(f"ATAN({expression})")
 
     @staticmethod
+    def atan2(y: PARA, x: PARA) -> Expression:
+        """反正切"""
+        return Expression(f"ATAN2({y}, {x})")
+
+    @staticmethod
     def sinh(expression: PARA) -> Expression:
         """双曲正弦"""
         return Expression(f"SINH({expression})")

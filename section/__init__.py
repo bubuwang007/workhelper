@@ -1,4 +1,5 @@
 from .C_Circular_Rect import C_Circular_Rect
+from .C_Circular_Rect0 import C_Circular_Rect0
 from .C_OctagonPipe_Rect import C_OctagonPipe_Rect
 from .Circular import Circular
 from .CircularPipe import CircularPipe

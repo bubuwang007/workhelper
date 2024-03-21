@@ -42,6 +42,12 @@ class ElementType:
     def mass21(self, itype, *kopt):
         self.ET(itype, "MASS21", *kopt)
 
+    def link10(self, itype, *kopt):
+        self.ET(itype, "LINK10", *kopt)
+    
+    def link10_spoke(self, itype):
+        self.ET(itype, "LINK10", "", "", 0)
+
     @all
     def GET(self, parname, entity, entnum="", item1="", it1num="", item2="", it2num="") -> Command:
         '''Retrieves data from the database.

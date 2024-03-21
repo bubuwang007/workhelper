@@ -222,3 +222,9 @@ class Mac(Commands):
 
     def __repr__(self) -> str:
         return self.name
+    
+    def run(self, path: str):
+        from mtl.launch._Launch import _Launch as Launch
+        self.output(path)
+        file = os.path.join(path, f"{self.name}.mac")
+        Launch(check=True).launch_by_file(file)

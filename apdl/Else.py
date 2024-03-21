@@ -11,6 +11,7 @@ class Else:
         self.__commands = commands
         self.__commands.append(Command(f"*ELSE"))
         self.__commands.add_prefix()
+        self.__commands.finish()
 
     def __enter__(self) -> Else:
         return self

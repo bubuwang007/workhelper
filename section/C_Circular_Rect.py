@@ -1,7 +1,11 @@
 import numpy as np
 from workhelper.section.Combination import Combination
-from .Rectangle import Rectangle
-from .CircularPipe import CircularPipe
+try:
+    from .Rectangle import Rectangle
+    from .CircularPipe import CircularPipe
+except ImportError:
+    from workhelper.section.Rectangle import Rectangle
+    from workhelper.section.CircularPipe import CircularPipe
 from workhelper.section.utils import clear_float_last_zero as cflz
 
 class C_Circular_Rect(Combination):

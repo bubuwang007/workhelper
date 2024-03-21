@@ -48,6 +48,21 @@ class Selecting:
 
     def nsel_all(self):
         self.NSEL("ALL")
+    
+    def nsel_none(self):
+        self.NSEL("NONE")
+
+    def nsel_by_num(self, start, end="", step="", type="S"):
+        self.NSEL(type, "NODE", "", start, end, step)
+
+    def nsel_xrange(self, xmin, xmax="", type="S"):
+        self.NSEL(type, "LOC", "X", xmin, xmax)
+
+    def nsel_yrange(self, ymin, ymax="", type="S"):
+        self.NSEL(type, "LOC", "Y", ymin, ymax)
+
+    def nsel_zrange(self, zmin, zmax="", type="S"):
+        self.NSEL(type, "LOC", "Z", zmin, zmax)
 
     def asel_none(self):
         self.ASEL("NONE")
@@ -92,6 +107,22 @@ class Selecting:
     @all
     def NSLK(self, type="S") -> Command:
         return Command(f"NSLK,{type}")
+
+    @all
+    def NSLE(self, type="S", nodetype="", num="") -> Command:
+        return Command(f"NSLE,{type},{nodetype},{num}")
+
+    @all
+    def ESLL(self, type="S") -> Command:
+        return Command(f"ESLL,{type}")
+
+    @all
+    def ESLN(self, type="S", ekey="", nodetype="") -> Command:
+        return Command(f"ESLN,{type},{ekey},{nodetype}")
+
+    @all
+    def NSLL(self, type="S", nkey="") -> Command:
+        return Command(f"NSLL,{type},{nkey}")
 
     @all
     def ESEL(self, type="S", item="", comp="",vmin="",vmax="",vinc="", kabs="") -> Command:

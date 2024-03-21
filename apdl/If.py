@@ -13,6 +13,7 @@ class If:
         self.__commands = commands
         self.__commands.append(Command(f"*IF,{condition},THEN"))
         self.__commands.add_prefix()
+        self.__commands.finish()
 
     def ElseIf(self, condition) -> ElseIf:
         self.__commands.sub_prefix()

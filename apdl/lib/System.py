@@ -126,7 +126,7 @@ class System:
             blank — Output is written starting at the top of the file.
             APPEND — Output is appended to the end of the file.
         '''
-        return Command(f"/OUTPUT,{fname},{ext},{loc}")
+        return Command(f"/OUTPUT,'{fname}','{ext}',{loc}")
     
     @all
     def GET(self, parname, entity, entnum="", item1="", it1num="", item2="", it2num="") -> Command:

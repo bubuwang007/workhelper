@@ -73,3 +73,9 @@ class Elements:
         '''
         return Command(f'MAT,{mat}')
     
+    @prep7
+    def ENDRELEASE(self, tolerance=-1, *dof) -> Command:
+        '''Specifies end release conditions for elements and nodes.'''
+        return Command(f'ENDRELEASE,,{tolerance},{",".join(map(str, dof))}')
+    
+    

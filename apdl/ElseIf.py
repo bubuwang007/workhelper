@@ -11,6 +11,7 @@ class ElseIf:
         self.__commands = commands
         self.__commands.append(Command(f"*ELSEIF,{condition}"))
         self.__commands.add_prefix()
+        self.__commands.finish()
 
     def __enter__(self) -> ElseIf:
         return self
